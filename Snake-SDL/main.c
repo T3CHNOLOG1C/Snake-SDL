@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 
@@ -48,6 +49,7 @@ void gameover(void);
 void draw_head(void);
 void draw_fruit(void);
 void clear_tail(void);
+void next_fruit(void);
 
 int main(void)
 {
@@ -91,15 +93,20 @@ int main(void)
 
 void init(void)
 {
-    dir = RIGHT;
 	snake.start = 0;
 	snake.end = 0;
-	head.x = 5;
-	head.y = 5;
+    srand((unsigned)time(NULL));
+    fruit.x = rand() % 16 + 5;
+    fruit.y = rand() % 6 + 5;
+    head = fruit;
+    if (head.x < (MAX_X / 2)) {
+        dir = RIGHT;
+    } else {
+        dir = LEFT;
+    }
 	push_head();
 	mat[head.x][head.y] = 1;
-	fruit.x = 12;
-	fruit.y = 7;
+	next_fruit();
     draw_fruit();
 }
 
@@ -153,8 +160,7 @@ int update(void)
 	}
 	if (head.x == fruit.x && head.y == fruit.y) {
         do {
-            fruit.x = (fruit.x * 23 + tail.x) % (MAX_X + 1);
-            fruit.y = (fruit.y * 13 + tail.y) % (MAX_Y + 1);
+            next_fruit();
         } while (mat[fruit.x][fruit.y]);
         draw_fruit();
 	} else {
@@ -215,4 +221,10 @@ void clear_tail(void)
     SDL_RenderCopy(renderer, field_texture, NULL, &rect);
     /* SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
      SDL_RenderFillRect(renderer, &rect); */
+}
+
+void next_fruit(void)
+{
+    fruit.x = (fruit.x * 6 + 1) % (MAX_X + 1);
+    fruit.y = (fruit.y * 16 + 1) % (MAX_Y + 1);
 }
