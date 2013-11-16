@@ -4,15 +4,16 @@
 #include <SDL2_image/SDL_image.h>
 
 #define QUEUE_SIZE 400
-#define UP    1
-#define DOWN  2
-#define LEFT  3
+#define LEFT  1
+#define UP    2
+#define DOWN  3
 #define RIGHT 4
 #define MAX_X 24
 #define MAX_Y 14
 #define TILE_SIZE 32
 
 int dir;
+int old_dir;
 char mat[MAX_X+1][MAX_Y+1];
 
 typedef struct tag_node {
@@ -81,9 +82,7 @@ int main(void)
 		input();
 		if (!gameover) {
 			gameover = update();
-		} /*else {
-           fprintf(stderr, "head: %d,%d\n", head.x, head.y);
-           }*/
+		}
 		render();
         SDL_Delay(100);
     }
@@ -118,6 +117,12 @@ void input(void)
         dir = RIGHT;
     } else if (state[SDL_SCANCODE_ESCAPE]) {
         exit(0);
+    }
+    /* Ignore opposite direction */
+    if (dir + old_dir != 5) {
+        old_dir = dir;
+    } else {
+        dir = old_dir;
     }
 }
 
