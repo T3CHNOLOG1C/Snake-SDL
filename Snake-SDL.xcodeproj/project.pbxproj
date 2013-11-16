@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		A77A76ED1837B54500D54C2D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A77A76EC1837B54500D54C2D /* main.c */; };
 		A77A76EF1837B54500D54C2D /* Snake_SDL.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = A77A76EE1837B54500D54C2D /* Snake_SDL.1 */; };
+		A77A76F71837B5B600D54C2D /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A77A76F51837B5B600D54C2D /* SDL2_image.framework */; };
+		A77A76F81837B5B600D54C2D /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A77A76F61837B5B600D54C2D /* SDL2.framework */; };
+		A77A77011837B77800D54C2D /* apple.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A77A76FD1837B73A00D54C2D /* apple.png */; };
+		A77A77021837B77800D54C2D /* field.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A77A76FE1837B73A00D54C2D /* field.jpg */; };
+		A77A77031837B77800D54C2D /* snake.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A77A76FF1837B73A00D54C2D /* snake.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -22,12 +27,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		A77A77001837B76F00D54C2D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				A77A77011837B77800D54C2D /* apple.png in CopyFiles */,
+				A77A77021837B77800D54C2D /* field.jpg in CopyFiles */,
+				A77A77031837B77800D54C2D /* snake.png in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A77A76E91837B54500D54C2D /* Snake-SDL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Snake-SDL"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A77A76EC1837B54500D54C2D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		A77A76EE1837B54500D54C2D /* Snake_SDL.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Snake_SDL.1; sourceTree = "<group>"; };
+		A77A76F51837B5B600D54C2D /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		A77A76F61837B5B600D54C2D /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		A77A76FD1837B73A00D54C2D /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
+		A77A76FE1837B73A00D54C2D /* field.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = field.jpg; sourceTree = "<group>"; };
+		A77A76FF1837B73A00D54C2D /* snake.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snake.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A77A76F71837B5B600D54C2D /* SDL2_image.framework in Frameworks */,
+				A77A76F81837B5B600D54C2D /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +68,8 @@
 		A77A76E01837B54500D54C2D = {
 			isa = PBXGroup;
 			children = (
+				A77A76F51837B5B600D54C2D /* SDL2_image.framework */,
+				A77A76F61837B5B600D54C2D /* SDL2.framework */,
 				A77A76EB1837B54500D54C2D /* Snake-SDL */,
 				A77A76EA1837B54500D54C2D /* Products */,
 			);
@@ -60,6 +86,9 @@
 		A77A76EB1837B54500D54C2D /* Snake-SDL */ = {
 			isa = PBXGroup;
 			children = (
+				A77A76FD1837B73A00D54C2D /* apple.png */,
+				A77A76FE1837B73A00D54C2D /* field.jpg */,
+				A77A76FF1837B73A00D54C2D /* snake.png */,
 				A77A76EC1837B54500D54C2D /* main.c */,
 				A77A76EE1837B54500D54C2D /* Snake_SDL.1 */,
 			);
@@ -76,6 +105,7 @@
 				A77A76E51837B54500D54C2D /* Sources */,
 				A77A76E61837B54500D54C2D /* Frameworks */,
 				A77A76E71837B54500D54C2D /* CopyFiles */,
+				A77A77001837B76F00D54C2D /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -195,6 +225,10 @@
 		A77A76F31837B54500D54C2D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -202,6 +236,10 @@
 		A77A76F41837B54500D54C2D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
