@@ -13,13 +13,14 @@
 #define MAX_Y 14
 #define TILE_SIZE 32
 
-int dir;
-int old_dir;
+char dir;
+char old_dir;
+char eaten;
 char mat[MAX_X+1][MAX_Y+1];
 
 typedef struct tag_node {
-	int x;
-	int y;
+	char x;
+	char y;
 } node;
 
 node head;
@@ -27,8 +28,9 @@ node tail;
 node fruit;
 
 typedef struct tag_queue {
-	int start;
-	int end;
+	int first;
+	int last;
+    int len;
 	node elems[QUEUE_SIZE];
 } queue;
 
@@ -53,8 +55,22 @@ void next_fruit(void);
 
 int main(void)
 {
+	init();
+	render();
+	for (;;) {
+		input();
+		if (update()) {
+			gameover();
+		}
+		render();
+        SDL_Delay(100);
+    }
+	return 0;
+}
+
+void init(void)
+{
     int i, j;
-    int gameover = 0;
     SDL_Window *window = NULL;
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         fprintf(stderr, "SDL_Init: %s\n", SDL_GetError());
@@ -78,26 +94,12 @@ int main(void)
             clear_tail();
         }
     }
-	init();
-	render();
-	while (1) {
-		input();
-		if (!gameover) {
-			gameover = update();
-		}
-		render();
-        SDL_Delay(100);
-    }
-	return 0;
-}
-
-void init(void)
-{
-	snake.start = 0;
-	snake.end = 0;
-    srand((unsigned)time(NULL));
-    fruit.x = rand() % 16 + 5;
-    fruit.y = rand() % 6 + 5;
+	snake.first = 0;
+	snake.last = 0;
+    snake.len = 0;
+    // srand((unsigned) (NULL));
+    fruit.x = /*rand() % 16 +*/ 5;
+    fruit.y = /*rand() % 6 +*/ 5;
     head = fruit;
     if (head.x < (MAX_X / 2)) {
         dir = RIGHT;
@@ -105,9 +107,9 @@ void init(void)
         dir = LEFT;
     }
 	push_head();
-	mat[head.x][head.y] = 1;
 	next_fruit();
-    draw_fruit();
+    eaten = 1;
+    old_dir = 0;
 }
 
 void input(void)
@@ -126,7 +128,7 @@ void input(void)
         exit(0);
     }
     /* Ignore opposite direction */
-    if (dir + old_dir != 5) {
+    if (dir + old_dir != 5 || snake.len == 1) {
         old_dir = dir;
     } else {
         dir = old_dir;
@@ -135,9 +137,6 @@ void input(void)
 
 int update(void)
 {
-    SDL_Rect rect;
-    rect.h = TILE_SIZE;
-    rect.w = TILE_SIZE;
 	switch (dir) {
         case UP:
             head.y = head.y - 1;
@@ -159,36 +158,48 @@ int update(void)
 		return 1;
 	}
 	if (head.x == fruit.x && head.y == fruit.y) {
-        do {
-            next_fruit();
-        } while (mat[fruit.x][fruit.y]);
-        draw_fruit();
+        next_fruit();
+        eaten = 1;
 	} else {
 		pop_tail();
-		mat[tail.x][tail.y] = 0;
-        clear_tail();
+        eaten = 0;
 	}
-	mat[head.x][head.y] = 1;
 	push_head();
-    draw_head();
 	return 0;
 }
 
 void render(void)
 {
+    if (eaten) {
+        draw_fruit();
+    } else {
+        clear_tail();
+    }
+    draw_head();
     SDL_RenderPresent(renderer);
 }
 
 void pop_tail(void)
 {
-	tail = snake.elems[snake.start];
-	snake.start = (snake.start + 1) % QUEUE_SIZE;
+	tail = snake.elems[snake.first];
+	snake.first = (snake.first + 1) % QUEUE_SIZE;
+    snake.len--;
+    mat[tail.x][tail.y] = 0;
 }
 
 void push_head(void)
 {
-	snake.elems[snake.end] = head;
-	snake.end = (snake.end + 1) % QUEUE_SIZE;
+	snake.elems[snake.last] = head;
+	snake.last = (snake.last + 1) % QUEUE_SIZE;
+    snake.len++;
+    mat[head.x][head.y] = 1;
+}
+
+void gameover(void)
+{
+    printf("Snake Length: %d\n", snake.len);
+    printf("Game Over\n");
+    exit(0);
 }
 
 void draw_head(void)
@@ -225,6 +236,8 @@ void clear_tail(void)
 
 void next_fruit(void)
 {
-    fruit.x = (fruit.x * 6 + 1) % (MAX_X + 1);
-    fruit.y = (fruit.y * 16 + 1) % (MAX_Y + 1);
+    do {
+        fruit.x = (fruit.x * 6 + 1) % (MAX_X + 1);
+        fruit.y = (fruit.y * 16 + 1) % (MAX_Y + 1);
+    } while (mat[fruit.x][fruit.y]);
 }
