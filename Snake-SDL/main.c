@@ -18,6 +18,8 @@ char old_dir;
 char eaten;
 char mat[MAX_X+1][MAX_Y+1];
 
+int delay = 16;
+
 typedef struct tag_node {
 	char x;
 	char y;
@@ -63,7 +65,7 @@ int main(void)
 			gameover();
 		}
 		render();
-        SDL_Delay(100);
+        SDL_Delay(delay * 10);
     }
 	return 0;
 }
@@ -110,6 +112,7 @@ void init(void)
 	next_fruit();
     eaten = 1;
     old_dir = 0;
+    printf("Level 1\n");
 }
 
 void input(void)
@@ -160,6 +163,24 @@ int update(void)
 	if (head.x == fruit.x && head.y == fruit.y) {
         next_fruit();
         eaten = 1;
+        switch (snake.len) {
+            case 10:
+                delay -= 4;
+                printf("Level 2\n");
+                break;
+            case 20:
+                delay -= 4;
+                printf("Level 3\n");
+                break;
+            case 30:
+                delay /= 2;
+                printf("Level 4\n");
+                break;
+            case 40:
+                delay /= 2;
+                printf("Level 5\n");
+                break;
+        }
 	} else {
 		pop_tail();
         eaten = 0;
