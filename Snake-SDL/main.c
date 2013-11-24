@@ -20,8 +20,8 @@ char mat[MAX_X+1][MAX_Y+1];
 int delay = 16;
 
 typedef struct tag_node {
-	char x;
-	char y;
+    char x;
+    char y;
 } node;
 
 node head;
@@ -29,10 +29,10 @@ node tail;
 node fruit;
 
 typedef struct tag_queue {
-	int first;
-	int last;
+    int first;
+    int last;
     int len;
-	node elems[QUEUE_SIZE];
+    node elems[QUEUE_SIZE];
 } queue;
 
 queue snake;
@@ -59,17 +59,17 @@ void next_fruit(void);
 
 int main(void)
 {
-	init();
-	render();
-	for (;;) {
-		input();
-		if (update()) {
-			gameover();
-		}
-		render();
+    init();
+    render();
+    for (;;) {
+        input();
+        if (update()) {
+            gameover();
+        }
+        render();
         SDL_Delay(delay * 10);
     }
-	return 0;
+    return 0;
 }
 
 void init(void)
@@ -97,8 +97,8 @@ void init(void)
             clear_tail();
         }
     }
-	snake.first = 0;
-	snake.last = 0;
+    snake.first = 0;
+    snake.last = 0;
     snake.len = 0;
     // srand((unsigned) (NULL));
     fruit.x = /*rand() % 16 +*/ 5;
@@ -109,8 +109,8 @@ void init(void)
     } else {
         dir = LEFT;
     }
-	push_head();
-	next_fruit();
+    push_head();
+    next_fruit();
     eaten = 1;
     old_dir = 0;
     printf("Level 1\n");
@@ -120,7 +120,7 @@ void input(void)
 {
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     SDL_PumpEvents();
-	if (state[SDL_SCANCODE_UP]) {
+    if (state[SDL_SCANCODE_UP]) {
         dir = UP;
     } else if (state[SDL_SCANCODE_DOWN]) {
         dir = DOWN;
@@ -141,7 +141,7 @@ void input(void)
 
 int update(void)
 {
-	switch (dir) {
+    switch (dir) {
         case UP:
             head.y = head.y - 1;
             break;
@@ -154,14 +154,14 @@ int update(void)
         case RIGHT:
             head.x = head.x + 1;
             break;
-	}
-	if (head.x < 0 || head.x > MAX_X || head.y < 0 || head.y > MAX_Y) {
-		return 1;
-	}
-	if (mat[head.x][head.y]) {
-		return 1;
-	}
-	if (head.x == fruit.x && head.y == fruit.y) {
+    }
+    if (head.x < 0 || head.x > MAX_X || head.y < 0 || head.y > MAX_Y) {
+        return 1;
+    }
+    if (mat[head.x][head.y]) {
+        return 1;
+    }
+    if (head.x == fruit.x && head.y == fruit.y) {
         next_fruit();
         eaten = 1;
         switch (snake.len) {
@@ -182,12 +182,12 @@ int update(void)
                 printf("Level 5\n");
                 break;
         }
-	} else {
-		pop_tail();
+    } else {
+        pop_tail();
         eaten = 0;
-	}
-	push_head();
-	return 0;
+    }
+    push_head();
+    return 0;
 }
 
 void render(void)
@@ -203,16 +203,16 @@ void render(void)
 
 void pop_tail(void)
 {
-	tail = snake.elems[snake.first];
-	snake.first = (snake.first + 1) % QUEUE_SIZE;
+    tail = snake.elems[snake.first];
+    snake.first = (snake.first + 1) % QUEUE_SIZE;
     snake.len--;
     mat[tail.x][tail.y] = 0;
 }
 
 void push_head(void)
 {
-	snake.elems[snake.last] = head;
-	snake.last = (snake.last + 1) % QUEUE_SIZE;
+    snake.elems[snake.last] = head;
+    snake.last = (snake.last + 1) % QUEUE_SIZE;
     snake.len++;
     mat[head.x][head.y] = 1;
 }
