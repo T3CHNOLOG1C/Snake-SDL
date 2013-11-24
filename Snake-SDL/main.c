@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <SDL2/SDL.h>
-#include <SDL2_image/SDL_image.h>
 
 #define QUEUE_SIZE 400
 #define LEFT  1
@@ -39,6 +38,9 @@ typedef struct tag_queue {
 queue snake;
 
 SDL_Renderer* renderer = NULL;
+SDL_Surface*  field_surface = NULL;
+SDL_Surface*  fruit_surface = NULL;
+SDL_Surface*  snake_surface = NULL;
 SDL_Texture*  field_texture = NULL;
 SDL_Texture*  fruit_texture = NULL;
 SDL_Texture*  snake_texture = NULL;
@@ -77,18 +79,17 @@ void init(void)
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         fprintf(stderr, "SDL_Init: %s\n", SDL_GetError());
     }
-    if (IMG_Init(0) != 0) {
-        fprintf(stderr, "IMG_Init: %s\n", SDL_GetError());
-    }
     atexit(SDL_Quit);
-    atexit(IMG_Quit);
     SDL_CreateWindowAndRenderer(800, 480, 0, &window, &renderer);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
-    fruit_texture = IMG_LoadTexture(renderer, "apple.png");
-    snake_texture = IMG_LoadTexture(renderer, "snake.png");
-    field_texture = IMG_LoadTexture(renderer, "field.jpg");
+    fruit_surface = SDL_LoadBMP("apple.bmp");
+    snake_surface = SDL_LoadBMP("snake.bmp");
+    field_surface = SDL_LoadBMP("field.bmp");
+    fruit_texture = SDL_CreateTextureFromSurface(renderer, fruit_surface);
+    snake_texture = SDL_CreateTextureFromSurface(renderer, snake_surface);
+    field_texture = SDL_CreateTextureFromSurface(renderer, field_surface);
     for (i = 0; i <= MAX_X; i++) {
         for (j = 0; j <= MAX_Y; j++) {
             tail.x = i;
