@@ -10,6 +10,7 @@
 		A7198EF818419DA9001B55F5 /* apple.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7198EF518419DA9001B55F5 /* apple.bmp */; };
 		A7198EF918419DA9001B55F5 /* field.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7198EF618419DA9001B55F5 /* field.bmp */; };
 		A7198EFA18419DA9001B55F5 /* snake.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7198EF718419DA9001B55F5 /* snake.bmp */; };
+		A72A0F251845D6DD00FA93D4 /* head.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = A72A0F241845D6DD00FA93D4 /* head.bmp */; };
 		A77A76ED1837B54500D54C2D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A77A76EC1837B54500D54C2D /* main.c */; };
 		A77A76EF1837B54500D54C2D /* Snake_SDL.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = A77A76EE1837B54500D54C2D /* Snake_SDL.1 */; };
 		A77A76F81837B5B600D54C2D /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A77A76F61837B5B600D54C2D /* SDL2.framework */; };
@@ -32,6 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				A72A0F251845D6DD00FA93D4 /* head.bmp in CopyFiles */,
 				A7198EF818419DA9001B55F5 /* apple.bmp in CopyFiles */,
 				A7198EF918419DA9001B55F5 /* field.bmp in CopyFiles */,
 				A7198EFA18419DA9001B55F5 /* snake.bmp in CopyFiles */,
@@ -44,6 +46,7 @@
 		A7198EF518419DA9001B55F5 /* apple.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = apple.bmp; path = "Snake-SDL/apple.bmp"; sourceTree = "<group>"; };
 		A7198EF618419DA9001B55F5 /* field.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = field.bmp; path = "Snake-SDL/field.bmp"; sourceTree = "<group>"; };
 		A7198EF718419DA9001B55F5 /* snake.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = snake.bmp; path = "Snake-SDL/snake.bmp"; sourceTree = "<group>"; };
+		A72A0F241845D6DD00FA93D4 /* head.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = head.bmp; path = "Snake-SDL/head.bmp"; sourceTree = "<group>"; };
 		A77A76E91837B54500D54C2D /* Snake-SDL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Snake-SDL"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A77A76EC1837B54500D54C2D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		A77A76EE1837B54500D54C2D /* Snake_SDL.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Snake_SDL.1; sourceTree = "<group>"; };
@@ -65,6 +68,7 @@
 		A77A76E01837B54500D54C2D = {
 			isa = PBXGroup;
 			children = (
+				A72A0F241845D6DD00FA93D4 /* head.bmp */,
 				A7198EF518419DA9001B55F5 /* apple.bmp */,
 				A7198EF618419DA9001B55F5 /* field.bmp */,
 				A7198EF718419DA9001B55F5 /* snake.bmp */,

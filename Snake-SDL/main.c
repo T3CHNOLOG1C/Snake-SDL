@@ -24,6 +24,7 @@ typedef struct tag_node {
     char y;
 } node;
 
+node body;
 node head;
 node tail;
 node fruit;
@@ -40,9 +41,11 @@ queue snake;
 SDL_Renderer* renderer = NULL;
 SDL_Surface*  field_surface = NULL;
 SDL_Surface*  fruit_surface = NULL;
+SDL_Surface*  shead_surface = NULL;
 SDL_Surface*  snake_surface = NULL;
 SDL_Texture*  field_texture = NULL;
 SDL_Texture*  fruit_texture = NULL;
+SDL_Texture*  shead_texture = NULL;
 SDL_Texture*  snake_texture = NULL;
 
 void init(void);
@@ -52,6 +55,7 @@ void render(void);
 void pop_tail(void);
 void push_head(void);
 void gameover(void);
+void draw_body(void);
 void draw_head(void);
 void draw_fruit(void);
 void clear_tail(void);
@@ -85,9 +89,11 @@ void init(void)
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
     fruit_surface = SDL_LoadBMP("apple.bmp");
+    shead_surface = SDL_LoadBMP("head.bmp");
     snake_surface = SDL_LoadBMP("snake.bmp");
     field_surface = SDL_LoadBMP("field.bmp");
     fruit_texture = SDL_CreateTextureFromSurface(renderer, fruit_surface);
+    shead_texture = SDL_CreateTextureFromSurface(renderer, shead_surface);
     snake_texture = SDL_CreateTextureFromSurface(renderer, snake_surface);
     field_texture = SDL_CreateTextureFromSurface(renderer, field_surface);
     for (i = 0; i <= MAX_X; i++) {
@@ -141,6 +147,7 @@ void input(void)
 
 int update(void)
 {
+    body = head;
     switch (dir) {
         case UP:
             head.y = head.y - 1;
@@ -192,6 +199,9 @@ int update(void)
 
 void render(void)
 {
+    if (snake.len > 1) {
+        draw_body();
+    }
     if (eaten) {
         draw_fruit();
     } else {
@@ -224,6 +234,16 @@ void gameover(void)
     exit(0);
 }
 
+void draw_body(void)
+{
+    SDL_Rect rect;
+    rect.h = TILE_SIZE;
+    rect.w = TILE_SIZE;
+    rect.x = body.x * TILE_SIZE;
+    rect.y = body.y * TILE_SIZE;
+    SDL_RenderCopy(renderer, snake_texture, NULL, &rect);
+}
+
 void draw_head(void)
 {
     SDL_Rect rect;
@@ -231,7 +251,7 @@ void draw_head(void)
     rect.w = TILE_SIZE;
     rect.x = head.x * TILE_SIZE;
     rect.y = head.y * TILE_SIZE;
-    SDL_RenderCopy(renderer, snake_texture, NULL, &rect);
+    SDL_RenderCopy(renderer, shead_texture, NULL, &rect);
 }
 
 void draw_fruit(void)
