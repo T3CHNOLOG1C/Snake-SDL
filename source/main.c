@@ -1,16 +1,32 @@
+#include <switch.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #define QUEUE_SIZE 400
 #define LEFT  1
 #define UP    2
 #define DOWN  3
 #define RIGHT 4
-#define MAX_X 24
-#define MAX_Y 14
+#define MAX_X 39
+#define MAX_Y 22
 #define TILE_SIZE 32
+
+#define BUTTON_DPAD_UP 13
+#define BUTTON_DPAD_DOWN 15
+#define BUTTON_DPAD_LEFT 12
+#define BUTTON_DPAD_RIGHT 14
+#define BUTTON_PLUS 10
+#define KEY_LSTICK_UP 17
+#define KEY_LSTICK_DOWN 19
+#define KEY_LSTICK_LEFT 16
+#define KEY_LSTICK_RIGHT 18
+
+
+
+
 
 char dir;
 char old_dir;
@@ -50,6 +66,8 @@ SDL_Texture*  snake_texture = NULL;
 
 void init(void);
 void input(void);
+void init_joycons(void);
+void init_romFS(void);
 int  update(void);
 void render(void);
 void pop_tail(void);
@@ -63,8 +81,10 @@ void next_fruit(void);
 
 int main(void)
 {
+    init_romFS();
     init();
     render();
+    init_joycons();
     for (;;) {
         input();
         if (update()) {
@@ -80,18 +100,19 @@ void init(void)
 {
     int i, j;
     SDL_Window *window = NULL;
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        fprintf(stderr, "SDL_Init: %s\n", SDL_GetError());
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
+        printf("SDL_Init: %s\n", SDL_GetError());
+        return -1;
     }
     atexit(SDL_Quit);
-    SDL_CreateWindowAndRenderer(800, 480, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(1280, 720, 0, &window, &renderer);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
-    fruit_surface = SDL_LoadBMP("apple.bmp");
-    shead_surface = SDL_LoadBMP("head.bmp");
-    snake_surface = SDL_LoadBMP("snake.bmp");
-    field_surface = SDL_LoadBMP("field.bmp");
+    fruit_surface = SDL_LoadBMP("romfs:/apple.bmp");
+    shead_surface = SDL_LoadBMP("romfs:/head.bmp");
+    snake_surface = SDL_LoadBMP("romfs:/snake.bmp");
+    field_surface = SDL_LoadBMP("romfs:/field.bmp");
     fruit_texture = SDL_CreateTextureFromSurface(renderer, fruit_surface);
     shead_texture = SDL_CreateTextureFromSurface(renderer, shead_surface);
     snake_texture = SDL_CreateTextureFromSurface(renderer, snake_surface);
@@ -124,26 +145,49 @@ void init(void)
 
 void input(void)
 {
-    const Uint8 *state = SDL_GetKeyboardState(NULL);
-    SDL_PumpEvents();
-    if (state[SDL_SCANCODE_UP]) {
-        dir = UP;
-    } else if (state[SDL_SCANCODE_DOWN]) {
-        dir = DOWN;
-    } else if (state[SDL_SCANCODE_LEFT]) {
-        dir = LEFT;
-    } else if (state[SDL_SCANCODE_RIGHT]) {
-        dir = RIGHT;
-    } else if (state[SDL_SCANCODE_ESCAPE]) {
-        exit(0);
-    }
-    /* Ignore opposite direction */
-    if (dir + old_dir != 5 || snake.len == 1) {
-        old_dir = dir;
-    } else {
-        dir = old_dir;
+SDL_Event event;
+while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_JOYBUTTONDOWN:
+                    // seek for joystick #0 down (B)
+                    // https://github.com/devkitPro/SDL/blob/switch-sdl2/src/joystick/switch/SDL_sysjoystick.c#L51
+                    if (event.jbutton.which == 0 && event.jbutton.button == BUTTON_DPAD_UP || event.jbutton.which == 0 && event.jbutton.button == KEY_LSTICK_UP) {
+                        dir = UP;
+                    } else if (event.jbutton.which == 0 && event.jbutton.button == BUTTON_DPAD_DOWN || event.jbutton.which == 0 && event.jbutton.button == KEY_LSTICK_DOWN) {
+                        dir = DOWN;
+                    } else if (event.jbutton.which == 0 && event.jbutton.button == BUTTON_DPAD_LEFT || event.jbutton.which == 0 && event.jbutton.button == KEY_LSTICK_LEFT) {
+                        dir = LEFT;
+                    } else if (event.jbutton.which == 0 && event.jbutton.button == BUTTON_DPAD_RIGHT || event.jbutton.which == 0 && event.jbutton.button == KEY_LSTICK_RIGHT) {
+                        dir = RIGHT;
+                    } else if (event.jbutton.which == 0 && event.jbutton.button == BUTTON_PLUS) {
+                        exit(0);
+                    }
+                    /* Ignore opposite direction */
+                    if (dir + old_dir != 5 || snake.len == 1) {
+                        old_dir = dir;
+                    } else {
+                    dir = old_dir;
+                    }
+            }
+}
+}
+
+void init_joycons(void) {
+        for (int i = 0; i < 2; i++) {
+        if (SDL_JoystickOpen(i) == NULL) {
+            printf("SDL_JoystickOpen: %s\n", SDL_GetError());
+            SDL_Quit();
+            return -1;
+        }
     }
 }
+
+void init_romFS(void) {
+    Result rc = romfsInit();
+    if (R_FAILED(rc))
+        printf("romfsInit: %08X\n", rc);
+}
+
 
 int update(void)
 {
