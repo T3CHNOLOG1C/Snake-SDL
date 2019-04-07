@@ -102,7 +102,7 @@ void init(void)
     SDL_Window *window = NULL;
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
         printf("SDL_Init: %s\n", SDL_GetError());
-        return -1;
+        return;
     }
     atexit(SDL_Quit);
     SDL_CreateWindowAndRenderer(1280, 720, 0, &window, &renderer);
@@ -177,7 +177,7 @@ void init_joycons(void) {
         if (SDL_JoystickOpen(i) == NULL) {
             printf("SDL_JoystickOpen: %s\n", SDL_GetError());
             SDL_Quit();
-            return -1;
+            return;
         }
     }
 }
